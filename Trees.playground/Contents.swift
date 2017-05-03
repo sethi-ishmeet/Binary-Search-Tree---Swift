@@ -10,7 +10,6 @@ class Tree {
     var count = 0
     
     func addNode(num: Int) -> Void {
-        
         let node = Node()
         node.data = num
         
@@ -24,7 +23,7 @@ class Tree {
         var temp: Node = root!
         
         while true {
-            if node.data < temp.data {
+            if node.data! < temp.data! {
                 if (temp.left == nil) {
                     temp.left = node
                     temp.left?.parent = temp
@@ -50,7 +49,7 @@ class Tree {
         
         while temp.data != num {
             if temp.data != nil {
-                if num < temp.data {
+                if num < temp.data! {
                     temp = temp.left!
                 }
                 else {
@@ -95,7 +94,7 @@ class Tree {
             return nil
         }
         
-        var node: Node = search(num)!
+        var node: Node = search(num: num)!
         
         if node.right != nil {
             let subTree: Tree? = Tree()
@@ -117,7 +116,7 @@ class Tree {
             return nil
         }
         
-        var node: Node! = search(num)!
+        var node: Node! = search(num: num)!
         
         if node.left != nil {
             let subTree: Tree = Tree()
@@ -152,23 +151,23 @@ class Tree {
             return
         }
         
-        let node = search(num)
+        let node = search(num: num)
         
         if node?.left == nil {
-            replace(node!, with: node?.right)
+            replace(a: node!, with: node?.right)
         } else if node?.right == nil {
-            replace(node!, with: node?.left)
+            replace(a: node!, with: node?.left)
         } else {
             let subTree = Tree()
             subTree.root = node?.right
             let minimum = subTree.minimum()
             
             if minimum?.parent?.data != node?.data {
-                replace(minimum!, with: minimum?.right)
+                replace(a: minimum!, with: minimum?.right)
                 minimum?.right = node?.right
                 minimum?.right?.parent = minimum
             }
-            replace(node!, with: minimum)
+            replace(a: node!, with: minimum)
             minimum?.left = node?.left
             minimum?.left?.parent = minimum
         }
@@ -176,52 +175,65 @@ class Tree {
     
     func inOrderTraversal(node: Node?) {
         if node != nil {
-            inOrderTraversal(node!.left)
-            print(node!.data)
-            inOrderTraversal(node!.right)
+            inOrderTraversal(node: node!.left)
+            print(node!.data!)
+            inOrderTraversal(node: node!.right)
         }
     }
     
     func preOrderTraversal(node: Node?) -> Void {
         if node != nil {
-            print(node?.data)
-            preOrderTraversal(node?.left)
-            preOrderTraversal(node?.right)
+            print(node?.data! ?? "nil")
+            preOrderTraversal(node: node?.left)
+            preOrderTraversal(node: node?.right)
         }
     }
     
     func postOrderTraversal(node: Node?) -> Void {
         if node != nil {
-            postOrderTraversal(node?.left)
-            postOrderTraversal(node?.right)
-            print(node?.data)
+            postOrderTraversal(node: node?.left)
+            postOrderTraversal(node: node?.right)
+            print(node?.data! ?? "nil")
         }
+    }
+    
+    func split(at num: Int) -> Node? {
+        let node: Node! = search(num: num)
+        let nextNode = node?.right
+        
+        node?.right = nil
+        nextNode?.parent = nil
+        
+        return nextNode
     }
 }
 
 var tree = Tree()
-tree.addNode(5)
-tree.addNode(8)
-tree.addNode(2)
-tree.addNode(14)
-tree.addNode(1)
-tree.addNode(4)
-tree.addNode(56)
-tree.addNode(1347)
-tree.addNode(30)
-tree.addNode(3241)
-tree.addNode(9)
-tree.addNode(0)
+tree.addNode(num: 5)
+tree.addNode(num: 8)
+tree.addNode(num: 2)
+tree.addNode(num: 14)
+tree.addNode(num: 1)
+tree.addNode(num: 4)
+tree.addNode(num: 56)
+tree.addNode(num: 1347)
+tree.addNode(num: 30)
+tree.addNode(num: 3241)
+tree.addNode(num: 9)
+tree.addNode(num: 0)
 
 //tree.inOrderTraversal(tree.root)
 //tree.preOrderTraversal(tree.root)
 //tree.postOrderTraversal(tree.root)
-tree.count
-tree.search(8)?.data
-tree.minimum()?.data
-tree.maximum()?.data
-tree.successor(8)?.data
-tree.predecessor(5)?.data
-tree.delete(4)
-tree.search(56)?.data
-tree.predecessor(5)?.data
+//tree.count
+//tree.search(num: 8)?.data
+//tree.minimum()?.data
+//tree.maximum()?.data
+//tree.successor(num: 8)?.data
+//tree.predecessor(num: 5)?.data
+//tree.delete(num: 4)
+//tree.search(num: 56)?.data
+//tree.predecessor(num: 5)?.data
+
+tree.split(at: 14)?.parent
+tree.search(num: 14)?.right
